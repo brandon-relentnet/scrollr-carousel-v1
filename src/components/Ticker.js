@@ -2,54 +2,84 @@ import React, { useEffect, useRef } from "react";
 import TickerBlock from "./TickerBlock";
 import "./Ticker.css";
 
-const Ticker = ({ blocks }) => {
+const Ticker = ({ blocks, visibleBlocks = 5, speed = "default" }) => {
   const tickerContentRef = useRef(null);
   const totalBlocks = blocks.length;
 
   // Duplicate blocks for seamless looping
   const tickerBlocks = [...blocks, ...blocks];
 
+  // Use a ref to store currentIndex
+  const currentIndexRef = useRef(0);
+
   useEffect(() => {
-    const stepDuration = 2000; // Duration for each step in milliseconds
-    const transitionDuration = 500; // Duration of the ease-in-out transition
-    const stepWidth = 100 / totalBlocks; // Percentage width of each block
+    // Define step durations based on speed
+    let stepDuration;
+    let transitionDuration;
+
+    switch (speed) {
+      case "fast":
+        stepDuration = 1000; // Fast speed
+        transitionDuration = 300;
+        break;
+      case "slow":
+        stepDuration = 3000; // Slow speed
+        transitionDuration = 700;
+        break;
+      default:
+        stepDuration = 2000; // Default speed
+        transitionDuration = 500;
+        break;
+    }
+
+    const stepWidth = 100 / visibleBlocks; // Percentage width of each block
     const tickerContent = tickerContentRef.current;
 
-    let currentIndex = 0;
+    // Adjust the transform to match the current index when props change
+    tickerContent.style.transition = "none"; // Disable transition
+    tickerContent.style.transform = `translateX(-${
+      currentIndexRef.current * stepWidth
+    }%)`;
 
     const moveNext = () => {
-      currentIndex++;
+      currentIndexRef.current++;
 
       // Apply transition
       tickerContent.style.transition = `transform ${transitionDuration}ms ease-in-out`;
 
       // Move to the next position
       tickerContent.style.transform = `translateX(-${
-        currentIndex * stepWidth
+        currentIndexRef.current * stepWidth
       }%)`;
 
       // When we have moved through all blocks, reset
-      if (currentIndex >= totalBlocks) {
+      if (currentIndexRef.current >= totalBlocks) {
         // After the transition ends, reset transform without transition
         setTimeout(() => {
           tickerContent.style.transition = "none";
           tickerContent.style.transform = `translateX(0%)`;
           tickerContent.getBoundingClientRect(); // Force reflow
-          currentIndex = 0;
+          currentIndexRef.current = 0;
         }, transitionDuration);
       }
     };
 
-    // Start the interval
-    const interval = setInterval(moveNext, stepDuration);
+    // Clear any existing interval to prevent multiple intervals
+    let intervalId;
 
-    return () => clearInterval(interval);
-  }, [totalBlocks]);
+    // Start the interval
+    intervalId = setInterval(moveNext, stepDuration);
+
+    // Cleanup function
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [totalBlocks, visibleBlocks, speed]);
 
   return (
     <div
       className="ticker-container"
-      style={{ "--visible-blocks": totalBlocks }}
+      style={{ "--visible-blocks": visibleBlocks }}
     >
       <div className="ticker-content" ref={tickerContentRef}>
         {tickerBlocks.map((blockContent, index) => (

@@ -14,5 +14,21 @@
   box-sizing: border-box;
   text-align: center;
   border: 1px solid #000;
-  /* Add any additional styles for your blocks */
+  transition: flex-basis 0.5s ease-in-out;
+  /* Add any additional styles */
+}
+
+.ticker-block h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.ticker-block p {
+  margin: 5px 0;
+}
+
+/* Ticker.css */
+.live-status {
+  color: red;
+  font-weight: bold;
 }

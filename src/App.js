@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Ticker from "./components/Ticker";
+import "./App.css";
 
 function App() {
   const [blocks, setBlocks] = useState([]);
+  const [visibleBlocks, setVisibleBlocks] = useState(5); // Default to 5 blocks
+  const [speed, setSpeed] = useState("default"); // Default speed
 
   useEffect(() => {
     // Function to fetch data
@@ -35,19 +38,18 @@ function App() {
         };
 
         const formattedThursday = formatDate(previousThursday);
-        const formattedSunday = formatDate(previousSunday);
         const formattedMonday = formatDate(recentMonday);
 
         console.log(
           "Fetching data from:",
           formattedThursday,
           "to",
-          formattedSunday
+          formattedMonday
         );
 
         // Fetch the data for Thursday to Sunday
         const responseThursdayToSunday = await fetch(
-          `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${formattedThursday}-${formattedSunday}`
+          `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${formattedThursday}-${formattedMonday}`
         );
         const data = await responseThursdayToSunday.json();
 
@@ -72,18 +74,33 @@ function App() {
             // Game status
             const statusType = event.status.type.name;
             let status;
+            let isLive = false;
             if (statusType === "STATUS_FINAL") {
               status = "Final";
             } else if (statusType === "STATUS_SCHEDULED") {
               status = "Scheduled";
+            } else if (statusType === "STATUS_IN_PROGRESS") {
+              status = "In Progress";
+              isLive = true; // Mark game as live
             } else {
               status = "In Progress";
             }
+
+            // Parse the date of the event (e.g., "2024-09-15T17:00Z")
+            const eventDate = new Date(event.date);
+            const formattedEventDate = eventDate.toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
 
             return {
               title: `${awayTeamName} @ ${homeTeamName}`,
               points: `${awayTeamScore} - ${homeTeamScore}`,
               status: status,
+              date: formattedEventDate,
+              isLive: isLive,
             };
           });
 
@@ -103,7 +120,31 @@ function App() {
 
   return (
     <div className="App">
-      <Ticker blocks={blocks} />
+      {/* Controls for changing visibleBlocks and speed */}
+      <div className="controls">
+        <label>
+          Visible Blocks:
+          <select
+            value={visibleBlocks}
+            onChange={(e) => setVisibleBlocks(parseInt(e.target.value))}
+          >
+            <option value={3}>3</option>
+            <option value={5}>5</option>
+            <option value={7}>7</option>
+          </select>
+        </label>
+
+        <label>
+          Speed:
+          <select value={speed} onChange={(e) => setSpeed(e.target.value)}>
+            <option value="fast">Fast</option>
+            <option value="default">Default</option>
+            <option value="slow">Slow</option>
+          </select>
+        </label>
+      </div>
+
+      <Ticker blocks={blocks} visibleBlocks={visibleBlocks} speed={speed} />
     </div>
   );
 }
