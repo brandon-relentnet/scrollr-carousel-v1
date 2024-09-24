@@ -1,21 +1,18 @@
 /* Ticker.css */
-.ticker-wrapper {
+
+.ticker-container {
   overflow: hidden;
-  background-color: #f1f1f1;
   width: 100%;
 }
 
-.ticker {
+.ticker-content {
   display: flex;
-  width: max-content;
-  will-change: transform;
 }
 
-.ticker-item {
-  flex: 0 0 auto;
-  padding: 10px 20px;
-  background: #0074D9;
-  color: white;
-  margin-right: 10px;
-  border-radius: 5px;
+.ticker-block {
+  flex: 0 0 calc(100% / var(--visible-blocks));
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px solid #000;
+  /* Add any additional styles for your blocks */
 }
