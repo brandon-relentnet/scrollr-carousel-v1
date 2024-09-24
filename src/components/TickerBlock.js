@@ -9,7 +9,7 @@ const TickerBlock = forwardRef(({ content }, ref) => {
       <p>{content.points}</p>
       <p>{content.status}</p>
       {/* Display the date of play */}
-      <p>Date: {content.date}</p>
+      <p>{content.date}</p>
       {/* Conditionally display 'Live' if the game is live */}
       {content.isLive && <p className="live-status">LIVE</p>}
     </div>
