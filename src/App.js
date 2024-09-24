@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Ticker from "./components/Ticker";
 import "./App.css";
 
@@ -106,8 +106,8 @@ function App() {
     }
   };
 
-  // Polling function to update live games
-  const updateLiveGames = async () => {
+  // Polling function to update live games, wrapped with useCallback
+  const updateLiveGames = useCallback(async () => {
     const liveGames = blocks.filter((block) => block.isLive);
     if (liveGames.length === 0) return; // No live games to update
 
@@ -139,7 +139,7 @@ function App() {
 
       setBlocks(updatedBlocks); // Update the state with new scores
     }
-  };
+  }, [blocks]);
 
   useEffect(() => {
     // Call fetch data once on load
@@ -150,7 +150,7 @@ function App() {
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
-  }, [blocks]);
+  }, [blocks, updateLiveGames]);
 
   return (
     <div className="App">
