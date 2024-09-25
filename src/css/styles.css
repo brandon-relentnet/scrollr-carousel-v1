@@ -29,7 +29,7 @@ body {
   flex: 0 0 calc(100% / var(--visible-blocks));
   box-sizing: border-box;
   text-align: center;
-  padding: 0.5em;
+  padding: 0.4em 0.2em 0.4em 0.2em;
   display: flex;
   align-items: center;
   justify-content: center;
