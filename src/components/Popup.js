@@ -1,9 +1,9 @@
-// Popup.js
 import React from "react";
 import TotalBlocksManager from "./managers/TotalBlocksManager";
 import ThemeManager from "./managers/ThemeManager";
 import HeightManager from "./managers/HeightManager";
-import SpeedManager from "./managers/SpeedManager"; // Import the SpeedManager component
+import SpeedManager from "./managers/SpeedManager";
+import DisplayedWeekManager from "./managers/DisplayedWeekManager"; // Import the new component
 
 const Popup = ({
   visibleBlocks,
@@ -12,6 +12,8 @@ const Popup = ({
   setSpeed,
   heightMode,
   setHeightMode,
+  weekRange,
+  setWeekRange,
 }) => {
   return (
     <div className="popup-controls">
@@ -26,6 +28,9 @@ const Popup = ({
 
       {/* HeightManager component to select height mode */}
       <HeightManager heightMode={heightMode} onChange={setHeightMode} />
+
+      {/* DisplayedWeekManager component to swap weeks */}
+      <DisplayedWeekManager weekRange={weekRange} setWeekRange={setWeekRange} />
 
       {/* ThemeManager component for changing themes */}
       <ThemeManager />

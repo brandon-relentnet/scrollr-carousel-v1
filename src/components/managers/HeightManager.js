@@ -8,7 +8,7 @@ const HeightManager = ({ heightMode, onChange }) => {
       <div className="select-wrapper">
         <select value={heightMode} onChange={(e) => onChange(e.target.value)}>
           <option value="shorter">Shorter</option>
-          <option value="default">Default</option>
+          <option value="default">Classic</option>
           <option value="taller">Taller</option>
         </select>
       </div>

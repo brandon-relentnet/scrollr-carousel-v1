@@ -7,9 +7,9 @@ const SpeedManager = ({ speed, setSpeed }) => {
       <label>Speed:</label>
       <div className="select-wrapper">
         <select value={speed} onChange={(e) => setSpeed(e.target.value)}>
-          <option value="fast">Fast</option>
-          <option value="default">Default</option>
-          <option value="slow">Slow</option>
+          <option value="fast">Faster</option>
+          <option value="default">Classic</option>
+          <option value="slow">Slower</option>
         </select>
       </div>
     </div>

@@ -18,9 +18,9 @@ body {
   position: absolute;
   bottom: 0px;
   background-color: var(--base);
-  transition: color var(--transition-duration) ease,
-    background-color var(--transition-duration) ease, height 0.3s ease; /* Smooth transition for height */
+  transition: all var(--transition-duration) ease; /* Smooth transition for height */
 }
+
 .ticker-content {
   display: flex;
   will-change: transform; /* Enable hardware acceleration for smooth animations */
@@ -160,7 +160,8 @@ body {
 
 .popup-controls .height-manager,
 .popup-controls .speed-manager,
-.popup-controls .total-blocks-manager {
+.popup-controls .total-blocks-manager,
+.popup-controls .displayed-week-manager {
   width: 100%;
   margin-bottom: 1em;
 }
