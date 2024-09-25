@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Ticker from "./components/Ticker";
+import Popup from "./components/Popup"; // Import the Popup component
 import "./App.css";
-import ThemeManager from "./components/ThemeManager";
 
 function App() {
   const [blocks, setBlocks] = useState([]);
   const [visibleBlocks, setVisibleBlocks] = useState(5); // Default to 5 blocks
   const [speed, setSpeed] = useState("default"); // Default speed
+  const [heightMode, setHeightMode] = useState("default"); // Height mode
 
   // Function to fetch data from the API (run once on initial load)
   const fetchData = async () => {
@@ -64,8 +65,8 @@ function App() {
           const awayTeamScore = awayTeam.score || "0";
 
           // Fetch team logos (use `team.logo` instead of `team.logos`)
-          const homeTeamLogo = homeTeam.team.logo; // Corrected to use the `logo` field
-          const awayTeamLogo = awayTeam.team.logo; // Corrected to use the `logo` field
+          const homeTeamLogo = homeTeam.team.logo;
+          const awayTeamLogo = awayTeam.team.logo;
 
           const statusType = event.status.type.name;
           let status;
@@ -77,7 +78,7 @@ function App() {
             status = "Scheduled";
           } else if (statusType === "STATUS_IN_PROGRESS") {
             status = "In Progress";
-            isLive = true; // Mark game as live
+            isLive = true;
           } else {
             status = "In Progress";
           }
@@ -91,6 +92,14 @@ function App() {
             day: "numeric",
           });
 
+          // Determine winner and loser based on API-provided data
+          const homeTeamWon = homeTeam.winner;
+          const awayTeamWon = awayTeam.winner;
+
+          // Extract the Gamecast link (href) from event.links array
+          const gameLink =
+            event.links && event.links[0] ? event.links[0].href : null;
+
           return {
             title: `${awayTeamName} @ ${homeTeamName}`,
             points: `${awayTeamScore} - ${homeTeamScore}`,
@@ -100,6 +109,9 @@ function App() {
             id: event.id, // Use this ID for re-fetching specific live games
             homeTeamLogo, // Include the home team logo
             awayTeamLogo, // Include the away team logo
+            href: gameLink, // Pass the Gamecast link here
+            homeTeamWon, // Winner status for home team
+            awayTeamWon, // Winner status for away team
           };
         });
 
@@ -159,33 +171,41 @@ function App() {
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, [updateLiveGames]); // Only depends on `updateLiveGames`, not `blocks`
 
+  const getHeightFromMode = (mode) => {
+    switch (mode) {
+      case "shorter":
+        return 150;
+      case "taller":
+        return 250;
+      case "default":
+      default:
+        return 200;
+    }
+  };
+
+  // Calculate the actual height from the selected mode
+  const height = getHeightFromMode(heightMode);
+
   return (
     <div className="App">
-      {/* Controls for changing visibleBlocks and speed */}
-      <div className="controls">
-        <label>
-          Blocks:
-          <select
-            value={visibleBlocks}
-            onChange={(e) => setVisibleBlocks(parseInt(e.target.value))}
-          >
-            <option value={3}>3</option>
-            <option value={5}>5</option>
-            <option value={7}>7</option>
-          </select>
-        </label>
-        <label>
-          Speed:
-          <select value={speed} onChange={(e) => setSpeed(e.target.value)}>
-            <option value="fast">Fast</option>
-            <option value="default">Default</option>
-            <option value="slow">Slow</option>
-          </select>
-        </label>
-        <ThemeManager />{" "}
-      </div>
+      {/* Popup component to manage all settings */}
+      <Popup
+        visibleBlocks={visibleBlocks}
+        setVisibleBlocks={setVisibleBlocks}
+        speed={speed}
+        setSpeed={setSpeed}
+        heightMode={heightMode}
+        setHeightMode={setHeightMode}
+      />
 
-      <Ticker blocks={blocks} visibleBlocks={visibleBlocks} speed={speed} />
+      {/* Pass height, visibleBlocks, and speed to the Ticker component */}
+      <Ticker
+        blocks={blocks}
+        visibleBlocks={visibleBlocks}
+        speed={speed}
+        height={height}
+        heightMode={heightMode}
+      />
     </div>
   );
 }
