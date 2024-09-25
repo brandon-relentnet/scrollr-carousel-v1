@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Ticker from "./components/Ticker";
 import "./App.css";
+import ThemeManager from "./components/ThemeManager";
 
 function App() {
   const [blocks, setBlocks] = useState([]);
@@ -163,7 +164,7 @@ function App() {
       {/* Controls for changing visibleBlocks and speed */}
       <div className="controls">
         <label>
-          Visible Blocks:
+          Blocks:
           <select
             value={visibleBlocks}
             onChange={(e) => setVisibleBlocks(parseInt(e.target.value))}
@@ -173,7 +174,6 @@ function App() {
             <option value={7}>7</option>
           </select>
         </label>
-
         <label>
           Speed:
           <select value={speed} onChange={(e) => setSpeed(e.target.value)}>
@@ -182,6 +182,7 @@ function App() {
             <option value="slow">Slow</option>
           </select>
         </label>
+        <ThemeManager />{" "}
       </div>
 
       <Ticker blocks={blocks} visibleBlocks={visibleBlocks} speed={speed} />

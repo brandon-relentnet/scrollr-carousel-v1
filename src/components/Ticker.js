@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import TickerBlock from "./TickerBlock";
-import "./Ticker.css";
+import "../css/styles.css";
 
 const Ticker = ({ blocks, visibleBlocks = 5, speed = "default" }) => {
   const tickerContentRef = useRef(null);
@@ -19,16 +19,16 @@ const Ticker = ({ blocks, visibleBlocks = 5, speed = "default" }) => {
 
     switch (speed) {
       case "fast":
-        stepDuration = 1000; // Fast speed
-        transitionDuration = 300;
+        stepDuration = 2500; // Shorter time before moving to the next step
+        transitionDuration = 1200; // Smoother, faster movement
         break;
       case "slow":
-        stepDuration = 3000; // Slow speed
-        transitionDuration = 700;
+        stepDuration = 4500; // Slower time between steps
+        transitionDuration = 2500; // Slower, smoother transition
         break;
       default:
-        stepDuration = 2000; // Default speed
-        transitionDuration = 500;
+        stepDuration = 3500; // Moderate time before next step
+        transitionDuration = 1800; // Moderate easing for the movement
         break;
     }
 
@@ -36,7 +36,7 @@ const Ticker = ({ blocks, visibleBlocks = 5, speed = "default" }) => {
     const tickerContent = tickerContentRef.current;
 
     // Adjust the transform to match the current index when props change
-    tickerContent.style.transition = "none"; // Disable transition
+    tickerContent.style.transition = "none"; // Disable transition initially
     tickerContent.style.transform = `translateX(-${
       currentIndexRef.current * stepWidth
     }%)`;
@@ -44,23 +44,23 @@ const Ticker = ({ blocks, visibleBlocks = 5, speed = "default" }) => {
     const moveNext = () => {
       currentIndexRef.current++;
 
-      // Apply transition
-      tickerContent.style.transition = `transform ${transitionDuration}ms ease-in-out`;
+      // Apply smooth cubic-bezier easing for even more natural movement
+      tickerContent.style.transition = `transform ${transitionDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
 
       // Move to the next position
       tickerContent.style.transform = `translateX(-${
         currentIndexRef.current * stepWidth
       }%)`;
 
-      // When we have moved through all blocks, reset
+      // When we have moved through all blocks, reset after the animation completes
       if (currentIndexRef.current >= totalBlocks) {
-        // After the transition ends, reset transform without transition
         setTimeout(() => {
+          // Disable transition and reset position without animation
           tickerContent.style.transition = "none";
           tickerContent.style.transform = `translateX(0%)`;
           tickerContent.getBoundingClientRect(); // Force reflow
           currentIndexRef.current = 0;
-        }, transitionDuration);
+        }, transitionDuration); // Reset after the current animation completes
       }
     };
 
