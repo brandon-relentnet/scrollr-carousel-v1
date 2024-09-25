@@ -34,13 +34,13 @@ const ThemeManager = () => {
   return (
     <button className="theme-toggle" onClick={toggleTheme}>
       {theme === "mocha" ? (
-        <FontAwesomeIcon icon={faPalette} />
+        <FontAwesomeIcon icon={faPalette} className="svg-shadow" />
       ) : theme === "macchiato" ? (
-        <FontAwesomeIcon icon={faCloud} />
+        <FontAwesomeIcon icon={faCloud} className="svg-shadow" />
       ) : theme === "frappe" ? (
-        <FontAwesomeIcon icon={faSun} />
+        <FontAwesomeIcon icon={faSun} className="svg-shadow" />
       ) : (
-        <FontAwesomeIcon icon={faMoon} />
+        <FontAwesomeIcon icon={faMoon} className="svg-shadow" />
       )}
     </button>
   );

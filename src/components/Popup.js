@@ -4,6 +4,7 @@ import ThemeManager from "./managers/ThemeManager";
 import HeightManager from "./managers/HeightManager";
 import SpeedManager from "./managers/SpeedManager";
 import DisplayedWeekManager from "./managers/DisplayedWeekManager"; // Import the new component
+import BorderRadiusManager from "./managers/BorderRadiusManager";
 
 const Popup = ({
   visibleBlocks,
@@ -34,6 +35,7 @@ const Popup = ({
 
       {/* ThemeManager component for changing themes */}
       <ThemeManager />
+      <BorderRadiusManager />
     </div>
   );
 };
