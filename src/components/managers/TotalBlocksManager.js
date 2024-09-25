@@ -3,12 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
 const TotalBlocksManager = ({ visibleBlocks, setVisibleBlocks }) => {
-  // Initialize state with the visibleBlocks prop
   const [currentBlocks, setCurrentBlocks] = useState(visibleBlocks);
 
   useEffect(() => {
-    // Whenever visibleBlocks changes, update local state and save to localStorage
-    setCurrentBlocks(visibleBlocks);
+    // Remove setCurrentBlocks(visibleBlocks)
     localStorage.setItem("visibleBlocks", visibleBlocks); // Save to localStorage
   }, [visibleBlocks]);
 

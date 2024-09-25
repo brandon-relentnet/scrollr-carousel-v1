@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 const HeightManager = ({ heightMode, onChange }) => {
-  // Initialize state with the heightMode prop
   const [currentHeightMode, setCurrentHeightMode] = useState(heightMode);
 
   useEffect(() => {
-    // Whenever heightMode changes, update local state and save to localStorage
-    setCurrentHeightMode(heightMode);
+    // Remove setCurrentHeightMode(heightMode), it's unnecessary
     localStorage.setItem("heightMode", heightMode); // Save to localStorage
   }, [heightMode]);
 
   const handleHeightChange = (e) => {
     const newHeightMode = e.target.value;
     setCurrentHeightMode(newHeightMode);
-    onChange(newHeightMode); // Update the heightMode in the app
+    onChange(newHeightMode); // Update the heightMode in the parent component
     localStorage.setItem("heightMode", newHeightMode); // Save to localStorage
   };
 

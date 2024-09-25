@@ -9,7 +9,9 @@ const calculateDateRange = (today, daysOffset) => {
 
 export const useFetchGames = (settings) => {
   const [blocks, setBlocks] = useState([]);
-  const prevSettingsRef = useRef(null); // Start with null to ensure the first load happens
+
+  // Ref to track if it's the first render
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +35,6 @@ export const useFetchGames = (settings) => {
 
           // Handle previous and next week logic here
           if (settings.weekRange === "previous" || dayOfWeek === 2) {
-            console.log("Setting to previous week.");
             const previousThursday = new Date(lastThursday);
             previousThursday.setDate(lastThursday.getDate() - 7);
             const previousMonday = new Date(previousThursday);
@@ -42,7 +43,6 @@ export const useFetchGames = (settings) => {
             startDate = previousThursday;
             endDate = previousMonday;
           } else if (settings.weekRange === "next") {
-            console.log("Setting to next week.");
             const upcomingThursday = new Date(lastThursday);
             upcomingThursday.setDate(lastThursday.getDate() + 7);
             const upcomingMonday = new Date(upcomingThursday);
@@ -51,7 +51,6 @@ export const useFetchGames = (settings) => {
             startDate = upcomingThursday;
             endDate = upcomingMonday;
           } else {
-            console.log("Setting to current week.");
             startDate = lastThursday;
             endDate = nextMonday;
           }
@@ -60,15 +59,12 @@ export const useFetchGames = (settings) => {
         } else {
           // Handle non-football sports date ranges
           if (settings.weekRange === "previous") {
-            console.log("Setting to previous week for non-football.");
             startDate = calculateDateRange(today, -8);
             endDate = calculateDateRange(today, -4);
           } else if (settings.weekRange === "next") {
-            console.log("Setting to next week for non-football.");
             startDate = calculateDateRange(today, 4);
             endDate = calculateDateRange(today, 8);
           } else {
-            console.log("Setting to current week for non-football.");
             startDate = calculateDateRange(today, -4);
             endDate = calculateDateRange(today, 4);
           }
@@ -111,7 +107,6 @@ export const useFetchGames = (settings) => {
 
         // Process events data
         if (data.events && data.events.length > 0) {
-          console.log(`Found ${data.events.length} events.`);
           const fetchedBlocks = data.events.map((event) => {
             const competition = event.competitions[0];
             const competitors = competition.competitors;
@@ -184,17 +179,17 @@ export const useFetchGames = (settings) => {
       }
     };
 
-    // Check if settings have actually changed or if it's the initial render
-    if (
-      settings.selectedSport !== prevSettingsRef.current?.selectedSport ||
-      settings.weekRange !== prevSettingsRef.current?.weekRange ||
-      prevSettingsRef.current === null // First render, trigger fetch
-    ) {
-      console.log("Settings changed or initial load. Fetching new data...");
-      prevSettingsRef.current = settings; // Update reference to current settings
+    // Avoid fetching on the first render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    // Only fetch data if necessary settings have changed
+    if (settings.selectedSport && settings.weekRange) {
       fetchData();
     }
-  }, [settings]);
+  }, [settings.selectedSport, settings.weekRange]); // Dependencies that trigger the effect
 
   return blocks;
 };

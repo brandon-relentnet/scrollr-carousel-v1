@@ -8,11 +8,12 @@ const getInitialBorderRadius = () => {
 };
 
 const BorderRadiusManager = () => {
-  const [borderRadius, setBorderRadius] = useState(getInitialBorderRadius);
+  const [borderRadius, setBorderRadius] = useState(() =>
+    getInitialBorderRadius()
+  ); // Lazy initialization
   const [boxShadow, setBoxShadow] = useState(""); // State to manage box-shadow on hover
 
   useEffect(() => {
-    // Apply the border-radius class to the body
     document.body.classList.remove(
       "border-radius-0",
       "border-radius-6",
@@ -20,7 +21,6 @@ const BorderRadiusManager = () => {
     );
     document.body.classList.add(borderRadius);
 
-    // Save the selected border radius in localStorage
     localStorage.setItem("borderRadius", borderRadius);
   }, [borderRadius]);
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Ticker from "./components/Ticker";
 import Popup from "./components/Popup";
 import { loadFromLocalStorage } from "./utils/utils";
@@ -18,20 +18,38 @@ function App() {
   const [settings, setSettings] = useState(initialSettings);
 
   // Generalized update function for settings
-  const updateSetting = (key, value) => {
+  const updateSetting = useCallback((key, value) => {
     setSettings((prevSettings) => ({
       ...prevSettings,
       [key]: value,
     }));
-  };
+  }, []);
 
-  // Setters for each setting
-  const setVisibleBlocks = (value) => updateSetting("visibleBlocks", value);
-  const setSpeed = (value) => updateSetting("speed", value);
-  const setHeightMode = (value) => updateSetting("heightMode", value);
-  const setWeekRange = (value) => updateSetting("weekRange", value);
-  const setSelectedSport = (value) => updateSetting("selectedSport", value);
-  const setTheme = (value) => updateSetting("theme", value);
+  // Memoized setters for each setting
+  const setVisibleBlocks = useCallback(
+    (value) => updateSetting("visibleBlocks", value),
+    [updateSetting]
+  );
+  const setSpeed = useCallback(
+    (value) => updateSetting("speed", value),
+    [updateSetting]
+  );
+  const setHeightMode = useCallback(
+    (value) => updateSetting("heightMode", value),
+    [updateSetting]
+  );
+  const setWeekRange = useCallback(
+    (value) => updateSetting("weekRange", value),
+    [updateSetting]
+  );
+  const setSelectedSport = useCallback(
+    (value) => updateSetting("selectedSport", value),
+    [updateSetting]
+  );
+  const setTheme = useCallback(
+    (value) => updateSetting("theme", value),
+    [updateSetting]
+  );
 
   const blocks = useFetchGames(settings);
 
@@ -51,6 +69,7 @@ function App() {
         setSpeed={setSpeed}
         heightMode={settings.heightMode}
         setHeightMode={setHeightMode}
+        weekRange={settings.weekRange}
         setWeekRange={setWeekRange}
         selectedSport={settings.selectedSport}
         setSelectedSport={setSelectedSport}

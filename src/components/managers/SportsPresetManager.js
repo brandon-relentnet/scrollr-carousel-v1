@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 
 const SportsPresetManager = ({ selectedSport, setSelectedSport }) => {
   const sports = ["football", "hockey", "baseball", "basketball"];
-
-  // Initialize state with the sport prop
   const [currentSport, setCurrentSport] = useState(selectedSport);
 
   useEffect(() => {
-    // Whenever selectedSport changes, update local state and save to localStorage
-    setCurrentSport(selectedSport);
+    // Remove setCurrentSport(selectedSport)
     localStorage.setItem("selectedSport", selectedSport); // Save to localStorage
   }, [selectedSport]);
 

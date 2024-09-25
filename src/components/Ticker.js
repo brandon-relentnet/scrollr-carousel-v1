@@ -121,25 +121,31 @@ const Ticker = ({
     }
   }, [visibleBlocks, heightMode, scoreFontSize, statusFontSize, dateFontSize]);
 
-  return (
+  return totalBlocks > 0 ? (
     <div
       className="ticker-container"
       style={{
         "--visible-blocks": visibleBlocks,
-        height: `${height}px`, // Dynamically set the height based on the prop
+        height: `${height}px`,
       }}
     >
-      {totalBlocks > 0 ? (
-        <div className="ticker-content" ref={tickerContentRef}>
-          {tickerBlocks.map((blockContent, index) => (
-            <TickerBlock key={index} content={blockContent} />
-          ))}
-        </div>
-      ) : (
-        <div className="no-game-data" style={{ height: `${height}px` }}>
-          No available game data, please choose a different preset.
-        </div>
-      )}
+      <div className="ticker-content" ref={tickerContentRef}>
+        {tickerBlocks.map((blockContent, index) => (
+          <TickerBlock key={index} content={blockContent} />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div
+      className="no-game-data"
+      style={{
+        height: `${height}px`,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      No available game data, please choose a different preset.
     </div>
   );
 };

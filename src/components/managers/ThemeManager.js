@@ -9,12 +9,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; // Import specific icons
 
 const ThemeManager = ({ theme, setTheme }) => {
-  // Initialize state with the theme prop
   const [currentTheme, setCurrentTheme] = useState(theme);
 
   useEffect(() => {
-    // Whenever theme changes, update local state and save to localStorage
-    setCurrentTheme(theme);
+    // Remove setCurrentTheme(theme)
     document.body.className = theme; // Apply theme class to body
     localStorage.setItem("theme", theme); // Save to localStorage
   }, [theme]);
