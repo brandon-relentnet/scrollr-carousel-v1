@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Scrollr",
+  "name": "A modern, customizable ticker",
   "icons": [
     {
       "src": "favicon.ico",

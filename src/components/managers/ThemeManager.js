@@ -1,5 +1,4 @@
-// src/components/ThemeManager.js
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,35 +8,33 @@ import {
   faMoon,
 } from "@fortawesome/free-solid-svg-icons"; // Import specific icons
 
-// Helper to get saved theme from localStorage (before render)
-const getInitialTheme = () => {
-  const savedTheme = localStorage.getItem("theme");
-  return savedTheme ? savedTheme : "mocha"; // Default to mocha if nothing is saved
-};
-
-const ThemeManager = () => {
-  const [theme, setTheme] = useState(getInitialTheme);
+const ThemeManager = ({ theme, setTheme }) => {
+  // Initialize state with the theme prop
+  const [currentTheme, setCurrentTheme] = useState(theme);
 
   useEffect(() => {
-    document.body.className = theme;
+    // Whenever theme changes, update local state and save to localStorage
+    setCurrentTheme(theme);
+    document.body.className = theme; // Apply theme class to body
+    localStorage.setItem("theme", theme); // Save to localStorage
   }, [theme]);
 
   const toggleTheme = () => {
     const themes = ["mocha", "macchiato", "frappe", "latte"];
-    const currentThemeIndex = themes.indexOf(theme);
+    const currentThemeIndex = themes.indexOf(currentTheme);
     const newTheme = themes[(currentThemeIndex + 1) % themes.length];
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme); // Save theme to localStorage
-    document.body.className = newTheme; // Apply theme class to body
+    setCurrentTheme(newTheme); // Update local state
+    setTheme(newTheme); // Update theme in the parent component
+    localStorage.setItem("theme", newTheme); // Save new theme to localStorage
   };
 
   return (
     <button className="theme-toggle" onClick={toggleTheme}>
-      {theme === "mocha" ? (
+      {currentTheme === "mocha" ? (
         <FontAwesomeIcon icon={faPalette} className="svg-shadow" />
-      ) : theme === "macchiato" ? (
+      ) : currentTheme === "macchiato" ? (
         <FontAwesomeIcon icon={faCloud} className="svg-shadow" />
-      ) : theme === "frappe" ? (
+      ) : currentTheme === "frappe" ? (
         <FontAwesomeIcon icon={faSun} className="svg-shadow" />
       ) : (
         <FontAwesomeIcon icon={faMoon} className="svg-shadow" />

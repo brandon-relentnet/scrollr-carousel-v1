@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const DisplayedWeekManager = ({ setWeekRange }) => {
-  const [currentWeek, setCurrentWeek] = useState("current");
+  // Retrieve the saved week from local storage or default to "current"
+  const savedWeek = localStorage.getItem("weekRange") || "current";
+  const [currentWeek, setCurrentWeek] = useState(savedWeek);
+
+  useEffect(() => {
+    // On component mount, set the initial week range based on local storage
+    setWeekRange(savedWeek);
+  }, [savedWeek, setWeekRange]);
 
   const handleWeekChange = (e) => {
     const selectedWeek = e.target.value;
     setCurrentWeek(selectedWeek);
     setWeekRange(selectedWeek); // Update the week range based on the user's selection
+    localStorage.setItem("weekRange", selectedWeek); // Save to local storage
   };
 
   return (

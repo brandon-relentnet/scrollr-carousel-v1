@@ -128,34 +128,27 @@ body {
   transition: transform 0.3s ease, filter 0.3s ease; /* Apply transition to transform and filter */
   position: absolute;
 }
-
 .theme-toggle {
   top: 0.6em;
   right: 0.8em;
 }
-
 /* Drop shadow effect for SVG */
 .svg-shadow {
   filter: drop-shadow(rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px);
 }
-
 .svg-shadow:hover {
   filter: drop-shadow(rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px);
 }
-
 .border-radius-toggle {
   top: 0.6em;
   right: 2.4em;
   margin-top: 3px;
 }
-
-/* Hover scaling effect */
 .theme-toggle:hover,
 .border-radius-toggle:hover {
   transform: scale(1.05); /* Slight scale on hover */
   transition: transform 0.3s ease, filter 0.3s ease; /* Smooth scaling and shadow */
 }
-/* Active scaling effect (when clicked) */
 .theme-toggle:active,
 .border-radius-toggle:active {
   transform: scale(1.4); /* Larger scale on click */
@@ -180,14 +173,16 @@ body {
 .popup-controls .height-manager,
 .popup-controls .speed-manager,
 .popup-controls .displayed-week-manager,
-.popup-controls .total-blocks-manager {
+.popup-controls .total-blocks-manager,
+.popup-controls .sports-preset-manager {
   width: 100%;
   margin-bottom: 1em;
 }
 .popup-controls .total-blocks-manager button,
 .popup-controls .height-manager select,
 .popup-controls .displayed-week-manager select,
-.popup-controls .speed-manager select {
+.popup-controls .speed-manager select,
+.popup-controls .sports-preset-manager select {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 .popup-controls .select-wrapper {
@@ -246,3 +241,13 @@ body {
   background-color: var(--surface1);
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
+.no-game-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: var(--text);
+  text-align: center;
+  font-weight: bold;
+}
+

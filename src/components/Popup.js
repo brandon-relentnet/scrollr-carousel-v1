@@ -5,6 +5,7 @@ import HeightManager from "./managers/HeightManager";
 import SpeedManager from "./managers/SpeedManager";
 import DisplayedWeekManager from "./managers/DisplayedWeekManager"; // Import the new component
 import BorderRadiusManager from "./managers/BorderRadiusManager";
+import SportsPresetManager from "./managers/SportsPresetManager";
 
 const Popup = ({
   visibleBlocks,
@@ -15,13 +16,22 @@ const Popup = ({
   setHeightMode,
   weekRange,
   setWeekRange,
+  selectedSport,
+  setSelectedSport,
+  theme,
+  setTheme,
 }) => {
   return (
     <div className="popup-controls">
       {/* TotalBlocks component for adjusting the visible blocks */}
       <TotalBlocksManager
-        totalBlocks={visibleBlocks}
-        setTotalBlocks={setVisibleBlocks}
+        visibleBlocks={visibleBlocks}
+        setVisibleBlocks={setVisibleBlocks}
+      />
+
+      <SportsPresetManager
+        selectedSport={selectedSport}
+        setSelectedSport={setSelectedSport}
       />
 
       {/* SpeedManager component for adjusting the speed */}
@@ -34,7 +44,7 @@ const Popup = ({
       <DisplayedWeekManager weekRange={weekRange} setWeekRange={setWeekRange} />
 
       {/* ThemeManager component for changing themes */}
-      <ThemeManager />
+      <ThemeManager theme={theme} setTheme={setTheme} />{" "}
       <BorderRadiusManager />
     </div>
   );

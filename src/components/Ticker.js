@@ -46,10 +46,12 @@ const Ticker = ({
 
   const { scoreFontSize, statusFontSize, dateFontSize } = calculateFontSizes(
     visibleBlocks,
-    heightMode,
+    heightMode
   );
 
   useEffect(() => {
+    if (totalBlocks === 0) return; // Don't start ticker if no blocks available
+
     let stepDuration;
     let transitionDuration;
 
@@ -102,19 +104,21 @@ const Ticker = ({
 
   // Apply dynamic font sizes based on visibleBlocks and heightMode
   useEffect(() => {
-    const tickerContainer = tickerContentRef.current.parentElement;
-    tickerContainer.style.setProperty(
-      "--score-font-size",
-      `${scoreFontSize}px`
-    );
-    tickerContainer.style.setProperty(
-      "--status-font-size",
-      `${statusFontSize}px`
-    );
-    tickerContainer.style.setProperty(
-      "--date-font-size",
-      `${dateFontSize}px`
-    );
+    const tickerContainer = tickerContentRef.current?.parentElement;
+    if (tickerContainer) {
+      tickerContainer.style.setProperty(
+        "--score-font-size",
+        `${scoreFontSize}px`
+      );
+      tickerContainer.style.setProperty(
+        "--status-font-size",
+        `${statusFontSize}px`
+      );
+      tickerContainer.style.setProperty(
+        "--date-font-size",
+        `${dateFontSize}px`
+      );
+    }
   }, [visibleBlocks, heightMode, scoreFontSize, statusFontSize, dateFontSize]);
 
   return (
@@ -125,11 +129,17 @@ const Ticker = ({
         height: `${height}px`, // Dynamically set the height based on the prop
       }}
     >
-      <div className="ticker-content" ref={tickerContentRef}>
-        {tickerBlocks.map((blockContent, index) => (
-          <TickerBlock key={index} content={blockContent} />
-        ))}
-      </div>
+      {totalBlocks > 0 ? (
+        <div className="ticker-content" ref={tickerContentRef}>
+          {tickerBlocks.map((blockContent, index) => (
+            <TickerBlock key={index} content={blockContent} />
+          ))}
+        </div>
+      ) : (
+        <div className="no-game-data" style={{ height: `${height}px` }}>
+          No available game data, please choose a different preset.
+        </div>
+      )}
     </div>
   );
 };
