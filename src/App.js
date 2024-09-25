@@ -7,7 +7,7 @@ function App() {
   const [visibleBlocks, setVisibleBlocks] = useState(5); // Default to 5 blocks
   const [speed, setSpeed] = useState("default"); // Default speed
 
-  // Function to fetch data from the API
+  // Function to fetch data from the API (run once on initial load)
   const fetchData = async () => {
     try {
       // Get today's date
@@ -62,6 +62,10 @@ function App() {
           const homeTeamScore = homeTeam.score || "0";
           const awayTeamScore = awayTeam.score || "0";
 
+          // Fetch team logos (use `team.logo` instead of `team.logos`)
+          const homeTeamLogo = homeTeam.team.logo; // Corrected to use the `logo` field
+          const awayTeamLogo = awayTeam.team.logo; // Corrected to use the `logo` field
+
           const statusType = event.status.type.name;
           let status;
           let isLive = false;
@@ -93,6 +97,8 @@ function App() {
             date: formattedEventDate,
             isLive: isLive,
             id: event.id, // Use this ID for re-fetching specific live games
+            homeTeamLogo, // Include the home team logo
+            awayTeamLogo, // Include the away team logo
           };
         });
 
@@ -141,16 +147,16 @@ function App() {
     }
   }, [blocks]);
 
+  // useEffect to fetch data only on mount
   useEffect(() => {
-    // Call fetch data once on load
-    fetchData();
+    fetchData(); // Fetch data once on component mount
+  }, []); // Empty dependency array ensures this runs only once
 
-    // Poll for live game updates every 30 seconds
-    const intervalId = setInterval(updateLiveGames, 30000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [blocks, updateLiveGames]);
+  // useEffect to poll live game updates every 30 seconds
+  useEffect(() => {
+    const intervalId = setInterval(updateLiveGames, 30000); // Poll every 30 seconds
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  }, [updateLiveGames]); // Only depends on `updateLiveGames`, not `blocks`
 
   return (
     <div className="App">

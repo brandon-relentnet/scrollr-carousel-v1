@@ -3,6 +3,8 @@
 .ticker-container {
   overflow: hidden;
   width: 100%;
+  position: absolute;
+  bottom: 0px;
 }
 
 .ticker-content {
@@ -31,4 +33,17 @@
 .live-status {
   color: red;
   font-weight: bold;
+}
+
+/* Ticker.css */
+.team-logos {
+  display: flex;
+  align-items: center;
+}
+
+.team-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  margin: 0 10px;
 }
